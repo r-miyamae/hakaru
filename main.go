@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	dataSourceName := "root:hakaru-pass@tcp(hakaru.csgez38b8vdy.ap-northeast-1.rds.amazonaws.com)/hakaru-db"
+	dataSourceName := "root:hakaru-pass@tcp(hakaru.csgez38b8vdy.ap-northeast-1.rds.amazonaws.com:3306)/hakaru-db"
 	hakaruHandler := func(w http.ResponseWriter, r *http.Request) {
 		db, err := sql.Open("mysql", dataSourceName)
 		if err != nil {
