@@ -1,17 +1,16 @@
 package main
 
 import (
-	"net/http"
-	"log"
-
 	"database/sql"
+	"fmt"
+	"log"
+	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
-	"fmt"
 )
 
 func main() {
-	dataSourceName := "root:hakaru-pass@tcp(127.0.0.1:13306)/hakaru-db"
+	dataSourceName := "root:hakaru-pass@tcp(hakaru.cx9y8ljher7t.ap-northeast-1.rds.amazonaws.com)/hakaru-db"
 	hakaruHandler := func(w http.ResponseWriter, r *http.Request) {
 		db, err := sql.Open("mysql", dataSourceName)
 		if err != nil {
@@ -66,7 +65,6 @@ func main() {
 			fmt.Println(name, value)
 		}
 	}
-
 
 	http.HandleFunc("/hakaru", hakaruHandler)
 	http.HandleFunc("/probe", probe)
