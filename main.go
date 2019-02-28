@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"os"
-	"github.com/voyagegroup/hakaru/etc"
+	"github.com/hakaru/etc"
 )
 
 func main() {
