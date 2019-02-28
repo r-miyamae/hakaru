@@ -4,36 +4,22 @@ import (
 	"net/http"
 	"log"
 
-	"database/sql"
-
-	_ "github.com/go-sql-driver/mysql"
 	"os"
+	"github.com/voyagegroup/hakaru/etc"
 )
 
 func main() {
-	dataSourceName := os.Getenv("HAKARU_DATASOURCENAME")
-	if dataSourceName == "" {
-		dataSourceName = "root:hakaru-pass@tcp(127.0.0.1:13306)/hakaru-db"
+	logpath := os.Getenv("HAKARU_LOGPATH")
+	if logpath == "" {
+		logpath = "./.hakaru.log"
 	}
+	logger := etc.NewLogger(logpath)
 
 	hakaruHandler := func(w http.ResponseWriter, r *http.Request) {
-		db, err := sql.Open("mysql", dataSourceName)
-		if err != nil {
-			panic(err.Error())
-		}
-		defer db.Close()
-
-		stmt, e := db.Prepare("INSERT INTO eventlog(at, name, value) values(NOW(), ?, ?)")
-		if e != nil {
-			panic(e.Error())
-		}
-
-		defer stmt.Close()
-
 		name := r.URL.Query().Get("name")
 		value := r.URL.Query().Get("value")
 
-		_, _ = stmt.Exec(name, value)
+		logger.Hakaru(name, value)
 
 		origin := r.Header.Get("Origin")
 		if origin != "" {

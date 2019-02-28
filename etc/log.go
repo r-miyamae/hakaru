@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"time"
 )
 
 type HakaruLog struct {
@@ -22,6 +23,14 @@ func NewLogger(path string) *Logger {
 		panic(err)
 	}
 	return &Logger{agent: log.New(f, "", 0)}
+}
+
+func (l *Logger) Hakaru(name string, value string) error {
+	return l.Log(HakaruLog{
+		At: time.Now().Format(time.RFC3339),
+		Name: name,
+		Value: value,
+	})
 }
 
 func (l *Logger) Log(v interface{}) error {
